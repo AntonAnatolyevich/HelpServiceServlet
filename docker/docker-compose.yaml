@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  tomcat:
+    image: tomcat:9.0 # Можно заменить на нужную версию Tomcat, например, tomcat:10.0
+    container_name: tomcat_container
+    ports:
+      - "8080:8080" # Проброс порта, чтобы иметь доступ к Tomcat с хоста
+    volumes:
+      - ./HelpService/build/libs/HelpService-1.0-SNAPSHOT.war:/usr/local/tomcat/webapps/HelpService-1.0-SNAPSHOT.war # Укажите путь к приложению на хосте
+      - ./tomcat_logs:/usr/local/tomcat/logs # Логи Tomcat будут сохраняться на хосте
+    environment:
+      - JAVA_OPTS=-Xms512m -Xmx1024m # Установка начальных и максимальных размеров памяти
+      - TZ=Europe/Moscow # Настройка часового пояса (по необходимости)
+    networks:
+      - tomcat-network
+
+networks:
+  tomcat-network:
+    driver: bridge
